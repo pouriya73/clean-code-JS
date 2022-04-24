@@ -700,3 +700,154 @@ class Cessna extends Airplane {
 
 
 
+### Avoid type-checking (part 1)
+JavaScript is untyped, which means your functions can take any type of argument. Sometimes you are bitten by this freedom and it becomes tempting to do type-checking in your functions. There are many ways to avoid having to do this. The first thing to consider is consistent APIs.
+
+
+#### Bad:
+```javascript
+function travelToTexas(vehicle) {
+  if (vehicle instanceof Bicycle) {
+    vehicle.pedal(this.currentLocation, new Location("texas"));
+  } else if (vehicle instanceof Car) {
+    vehicle.drive(this.currentLocation, new Location("texas"));
+  }
+}
+```
+#### Good:
+```javascript
+function travelToTexas(vehicle) {
+  vehicle.move(this.currentLocation, new Location("texas"));
+}
+```
+
+
+### Avoid type-checking (part 2)
+If you are working with basic primitive values like strings and integers, and you can't use polymorphism but you still feel the need to type-check, you should consider using TypeScript. It is an excellent alternative to normal JavaScript, as it provides you with static typing on top of standard JavaScript syntax. The problem with manually type-checking normal JavaScript is that doing it well requires so much extra verbiage that the faux "type-safety" you get doesn't make up for the lost readability. Keep your JavaScript clean, write good tests, and have good code reviews. Otherwise, do all of that but with TypeScript (which, like I said, is a great alternative!).
+
+
+#### Bad:
+```javascript
+function combine(val1, val2) {
+  if (
+    (typeof val1 === "number" && typeof val2 === "number") ||
+    (typeof val1 === "string" && typeof val2 === "string")
+  ) {
+    return val1 + val2;
+  }
+
+  throw new Error("Must be of type String or Number");
+}
+```
+#### Good:
+```javascript
+function combine(val1, val2) {
+  return val1 + val2;
+}
+```
+
+
+
+### Don't over-optimize
+Modern browsers do a lot of optimization under-the-hood at runtime. A lot of times, if you are optimizing then you are just wasting your time. There are good resources for seeing where optimization is lacking. Target those in the meantime, until they are fixed if they can be.
+
+
+#### Bad:
+```javascript
+// On old browsers, each iteration with uncached `list.length` would be costly
+// because of `list.length` recomputation. In modern browsers, this is optimized.
+for (let i = 0, len = list.length; i < len; i++) {
+  // ...
+}
+```
+#### Good:
+```javascript
+for (let i = 0; i < list.length; i++) {
+  // ...
+}
+```
+
+
+
+### Remove dead code
+Dead code is just as bad as duplicate code. There's no reason to keep it in your codebase. If it's not being called, get rid of it! It will still be safe in your version history if you still need it.
+
+
+#### Bad:
+```javascript
+function oldRequestModule(url) {
+  // ...
+}
+
+function newRequestModule(url) {
+  // ...
+}
+
+const req = newRequestModule;
+inventoryTracker("apples", req, "www.inventory-awesome.io");
+```
+#### Good:
+```javascript
+function newRequestModule(url) {
+  // ...
+}
+
+const req = newRequestModule;
+inventoryTracker("apples", req, "www.inventory-awesome.io");
+```
+
+
+
+
+### Objects and Data Structures
+Use getters and setters
+Using getters and setters to access data on objects could be better than simply looking for a property on an object. "Why?" you might ask. Well, here's an unorganized list of reasons why:
+
+When you want to do more beyond getting an object property, you don't have to look up and change every accessor in your codebase.
+Makes adding validation simple when doing a set.
+Encapsulates the internal representation.
+Easy to add logging and error handling when getting and setting.
+
+
+
+#### Bad:
+```javascript
+function makeBankAccount() {
+  // ...
+
+  return {
+    balance: 0
+    // ...
+  };
+}
+
+const account = makeBankAccount();
+account.balance = 100;
+```
+#### Good:
+```javascript
+function makeBankAccount() {
+  // this one is private
+  let balance = 0;
+
+  // a "getter", made public via the returned object below
+  function getBalance() {
+    return balance;
+  }
+
+  // a "setter", made public via the returned object below
+  function setBalance(amount) {
+    // ... validate before updating the balance
+    balance = amount;
+  }
+
+  return {
+    // ...
+    getBalance,
+    setBalance
+  };
+}
+
+const account = makeBankAccount();
+account.setBalance(100);
+```
