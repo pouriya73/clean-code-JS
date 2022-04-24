@@ -41,3 +41,55 @@ const MILLISECONDS_PER_DAY = 60 * 60 * 24 * 1000; //86400000;
 
 setTimeout(blastOff, MILLISECONDS_PER_DAY);
 ```
+
+
+### Use explanatory variables
+
+#### Bad:
+```javascript
+const address = "One Infinite Loop, Cupertino 95014";
+const cityZipCodeRegex = /^[^,\\]+[,\\\s]+(.+?)\s*(\d{5})?$/;
+saveCityZipCode(
+  address.match(cityZipCodeRegex)[1],
+  address.match(cityZipCodeRegex)[2]
+);
+```
+#### Good:
+```javascript
+const address = "One Infinite Loop, Cupertino 95014";
+const cityZipCodeRegex = /^[^,\\]+[,\\\s]+(.+?)\s*(\d{5})?$/;
+const [_, city, zipCode] = address.match(cityZipCodeRegex) || [];
+saveCityZipCode(city, zipCode);
+```
+
+
+
+### Avoid Mental Mapping , Explicit is better than implicit.
+
+#### Bad:
+```javascript
+const locations = ["Austin", "New York", "San Francisco"];
+locations.forEach(l => {
+  doStuff();
+  doSomeOtherStuff();
+  // ...
+  // ...
+  // ...
+  // Wait, what is `l` for again?
+  dispatch(l);
+});
+```
+#### Good:
+```javascript
+const locations = ["Austin", "New York", "San Francisco"];
+locations.forEach(location => {
+  doStuff();
+  doSomeOtherStuff();
+  // ...
+  // ...
+  // ...
+  dispatch(location);
+});
+```
+
+
