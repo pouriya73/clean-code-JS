@@ -902,6 +902,7 @@ Remember, use version control! There's no need for dead code, commented code, an
  * 2016-10-01: Improved using special monads (JP)
  * 2016-02-03: Removed type-checking (LI)
  * 2015-03-14: Added combine with type-checking (JR)
+ data form : clean-code book
  */
 function combine(a, b) {
   return a + b;
