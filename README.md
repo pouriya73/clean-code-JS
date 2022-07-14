@@ -858,6 +858,7 @@ They usually just add noise. Let the functions and variable names along with the
 
 #### Bad:
 
+```javascript
 ////////////////////////////////////////////////////////////////////////////////
 // Scope Model Instantiation
 ////////////////////////////////////////////////////////////////////////////////
@@ -872,9 +873,13 @@ $scope.model = {
 const actions = function() {
   // ...
 };
+```
+
 
 #### Good:
 
+
+```javascript
 $scope.model = {
   menu: "foo",
   nav: "bar"
@@ -883,3 +888,4 @@ $scope.model = {
 const actions = function() {
   // ...
 };
+```
