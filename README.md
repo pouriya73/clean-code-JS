@@ -851,3 +851,35 @@ function makeBankAccount() {
 const account = makeBankAccount();
 account.setBalance(100);
 ```
+
+
+### Avoid positional markers
+They usually just add noise. Let the functions and variable names along with the proper indentation and formatting give the visual structure to your code.
+
+#### Bad:
+
+////////////////////////////////////////////////////////////////////////////////
+// Scope Model Instantiation
+////////////////////////////////////////////////////////////////////////////////
+$scope.model = {
+  menu: "foo",
+  nav: "bar"
+};
+
+////////////////////////////////////////////////////////////////////////////////
+// Action setup
+////////////////////////////////////////////////////////////////////////////////
+const actions = function() {
+  // ...
+};
+
+#### Good:
+
+$scope.model = {
+  menu: "foo",
+  nav: "bar"
+};
+
+const actions = function() {
+  // ...
+};
